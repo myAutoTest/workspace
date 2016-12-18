@@ -6,23 +6,24 @@ from COMMON.BaseGoals import Goals as go
 from COMMON import check
 
 import xlsxwriter
-from MODEL import Memail
+# from MODEL import Memail
+import model.Memail,model.Mhttpbase,model.Mresult,model.MresultDetail
 from BLL import BgetEmail,BsendEmail
 from BLL import BexcelReport as excel
 from COMMON import operateXML as om
 from BLL import Bhttpbase
-from MODEL import Mhttpbase
+# from MODEL import Mhttpbase
 from BLL import Bresult, BresultDetail
-from MODEL import Mresult, MresultDetail
+#from MODEL import Mresult, MresultDetail
 from COMMON import http_param
 import json
 import ast
 
 
-mresult = Mresult.result()
+mresult = model.Mresult.result()
 mresult.info = []
 def get_email():
-    g_email = Memail.email()
+    g_email = model.Memail.email()
     g_email.file = "D:\\app\\auto_http34_test\\email.ini"
     email = BgetEmail.read_email(g_email)
     return email
@@ -39,7 +40,8 @@ def excel_report(wd, data, worksheet_init, worksheet_detail):
 
 # 得到xml配置接口信息和http请求实体类
 def get_api():
-   return om.getXML("d:\\app\\auto_http34_test\\test4.xml", Mhttpbase.BaseHttp())
+   #return om.getXML("d:\\app\\auto_http34_test\\test4.xml", model.Mhttpbase.BaseHttp())
+    return om.getXML("/mnt/hgfs/vm_share/test4.xml", model.Mhttpbase.BaseHttp())
 
 # 设置http请求实体类
 def configHttp(httpbase):
@@ -121,7 +123,7 @@ def run_case(runner):
             test_suite = get_test_suite(index)
             runner.run(test_suite)
             # 记录运行结果
-            mresult.info.append(json.loads(json.dumps(resultInfo(MresultDetail.resultInfo(), t_id=gm[index]["id"], t_name=gm[index]["name"], t_url=gm[0]["host"] +"/" + gm[index]["url"],
+            mresult.info.append(json.loads(json.dumps(resultInfo(model.MresultDetail.resultInfo(), t_id=gm[index]["id"], t_name=gm[index]["name"], t_url=gm[0]["host"] +"/" + gm[index]["url"],
                        t_param=str(go.PARAMS), t_actual=go.REALLY_RESULT, t_hope=gm[index]["hope"], t_result=go.RESULT,
                        t_method=gm[index]["method"]).to_primitive())))
     else:
@@ -131,7 +133,7 @@ def run_case(runner):
                     test_suite = get_test_suite(j)
                     runner.run(test_suite)
                     # 记录运行结果
-                    mresult.info.append(json.loads(json.dumps(resultInfo(MresultDetail.resultInfo(), t_id=gm[j]["id"], t_name=gm[j]["name"], t_url=gm[0]["host"] +"/"+gm[j]["url"],
+                    mresult.info.append(json.loads(json.dumps(resultInfo(model.MresultDetail.resultInfo(), t_id=gm[j]["id"], t_name=gm[j]["name"], t_url=gm[0]["host"] +"/"+gm[j]["url"],
                        t_param=str(go.PARAMS), t_actual=go.REALLY_RESULT, t_hope=gm[j]["hope"], t_result=go.RESULT,
                        t_method=gm[j]["method"]).to_primitive())))
 
